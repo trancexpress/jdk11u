@@ -1600,9 +1600,9 @@ void JvmtiExport::post_method_exit(JavaThread *thread, Method* method, frame cur
     }
   }
 
-  JvmtiEnvThreadStateIterator it(state);
-  for (JvmtiEnvThreadState* ets = it.first(); ets != NULL; ets = it.next(ets)) {
-    if (ets->has_frame_pops()) {
+  if (state->is_enabled(JVMTI_EVENT_FRAME_POP)) {
+    JvmtiEnvThreadStateIterator it(state);
+    for (JvmtiEnvThreadState* ets = it.first(); ets != NULL; ets = it.next(ets)) {
       int cur_frame_number = state->cur_stack_depth();
 
       if (ets->is_frame_pop(cur_frame_number)) {
